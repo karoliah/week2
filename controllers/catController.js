@@ -7,15 +7,22 @@ const cat_list_get = (req, res) => {
   res.json(cats);
 };
 
-const cat_get = (req, res) => {
+const cat_get = async (req, res) => {
   console.log('cat id parameter', req.params);
-  const cat = cats.filter(cat => cat.id === req.params.id).pop();
+  const cat = await catModel.getCat(req.params.id);//cats.filter(cat => cat.id === req.params.id).pop();
   res.json(cat);
 };
 
-const cat_post = (req, res) => {
+const cat_post = async (req, res) => {
   console.log('cat_post', req.body);
-  res.send('With this endpoint you can add cats');
+  const inCat = {
+    name: req.body.name,
+    age: req.body.age,
+    weight: req.body.weight,
+    owner: req.body.owner,
+  };
+  const cat = await catModel.insertCat(inCat);
+  res.send(`added cat: ${cat}`);
 };
 
 module.exports = {
