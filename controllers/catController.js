@@ -14,12 +14,13 @@ const cat_get = async (req, res) => {
 };
 
 const cat_post = async (req, res) => {
-  console.log('cat_post', req.body);
+  console.log('cat_post', req.body, req.file);
   const inCat = {
     name: req.body.name,
     age: req.body.age,
     weight: req.body.weight,
     owner: req.body.owner,
+    filename: req.file.filename
   };
   const cat = await catModel.insertCat(inCat);
   res.send(`added cat: ${cat}`);
