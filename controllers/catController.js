@@ -22,8 +22,14 @@ const cat_post = async (req, res) => {
     owner: req.body.owner,
     filename: req.file.filename
   };
-  const cat = await catModel.insertCat(inCat);
-  res.send(`added cat: ${cat}`);
+  try{
+    const cat = await catModel.insertCat(inCat);
+    console.log()
+    res.send(`added cat: ${cat.insertId}`);
+  } catch (e) {
+    console.error('problem with cat_post in catController', e);
+    res.status(500).send(`database insert error: ${e.message}`);
+  }
 };
 
 module.exports = {
