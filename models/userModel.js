@@ -32,7 +32,7 @@ const getUser = async (id) => {
   //before sendig the user back
 
   try {
-    const [rows] = await promisePool.query('SELECT * FROM wop_user WHERE user_id = ?', [id]);
+    const [rows] = await promisePool.query('SELECT user_id,name,email FROM wop_user WHERE user_id = ?', [id]);
     return rows;
   } catch (e) {
     console.error('error', e.message);
