@@ -1,3 +1,3 @@
-# wop-starters
+# week2
 
-Choose a branch and download as zip.
+Week2 exercises.
