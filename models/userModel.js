@@ -1,4 +1,6 @@
 'use strict';
+const promisePool = require('../database/db').promise();
+
 const users = [
   {
     id: '1',
@@ -14,14 +16,55 @@ const users = [
   },
 ];
 
-const getUser = (id) => {
-  const user = users.filter((usr) => {
+const getUserList = async () => {
+  //Select user id, name, email from wop_user
+  try {
+    const [rows] = await promisePool.query('SELECT user_id,name,email FROM wop_user');
+    return rows;
+  } catch (e) {
+    console.error('error', e.message);
+  }
+};
+
+const getUser = async (id) => {
+  //select * from woå_user where id = ?
+  //remember in controller do: delete user.password
+  //before sendig the user back
+
+  try {
+    const [rows] = await promisePool.query('SELECT * FROM wop_user WHERE user_id = ?', [id]);
+    return rows;
+  } catch (e) {
+    console.error('error', e.message);
+  }
+};
+
+  /*const user = users.filter((usr) => {
     if (usr.id === id) {
       return usr;
     }
   });
   return user[0];
+};*/
+
+const insertUser = async (user) => {
+  try{
+    console.log('insert user?', user);
+    const [rows] = await promisePool.query('INSERT INTO wop_user (name, email, password) VALUES (?, ?, ?)', [user.name, user.email, user.password]);
+  } catch (e) {
+    console.error('updateUser model crash', e.message);
+  }
 };
+
+const updateUser = async (user) => {
+  try{
+    console.log('insert user?', user);
+    const [rows] = await promisePool.query('UPDATE wop_user SET name = ?, email = ?, password= ? WHERE wop_user.user_id = ?', [user.name, user.email, user.password, user.id]);
+
+  } catch (e) {
+    console.error('updateUser model crash', e.message)
+  }
+}
 
 const getUserLogin = (email) => {
   const user = users.filter((usr) => {
@@ -36,5 +79,7 @@ module.exports = {
   users,
   getUser,
   getUserLogin,
+  insertUser,
+  updateUser,
+  getUserList,
 };
-
